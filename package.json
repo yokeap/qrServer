@@ -1,0 +1,25 @@
+{
+  "name": "qrserver",
+  "version": "1.0.0",
+  "description": "registed data server",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/yokeap/qrServer.git"
+  },
+  "author": "S.Sukprasertchai",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/yokeap/qrServer/issues"
+  },
+  "homepage": "https://github.com/yokeap/qrServer#readme",
+  "dependencies": {
+    "bower": "^1.8.4",
+    "express": "^4.16.4",
+    "mongojs": "^2.6.0",
+    "promise": "^8.0.2"
+  }
+}

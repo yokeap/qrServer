@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" name="viewport">
+    <meta name="viewport" content="width=device-width">
+
+    <title>Registration System Admin Panel</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font awesome core css-->
+    <link href="bower_components/font-awesome/css/fontawesome.min.css" rel="stylesheet">
+    <link href="bower_components/font-awesome/css/solid.min.css" rel="stylesheet">
+
+    <link href="bower_components/roundslider/dist/roundslider.min.css" rel="stylesheet" />
+    <link href="css/ng-table.min.css" rel="stylesheet"; >
+
+
+    <link href="css/light-bootstrap-dashboard.css" rel="stylesheet">
+    <link href="css/roundslider.css" rel="stylesheet" >
+
+    <!-- Angular core -->
+    <script src="bower_components/angular/angular.min.js"></script>
+
+  </head>
+  <body ng-app="myApp">
+    <div class="wrapper" ng-controller="MainController">
+      <nav class="navbar navbar-light bg-light">
+        <a class="navbar-brand" >Registration Admin Dashboard</a>
+      </nav>
+
+      <div class="contain">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-md-4">
+              <div class="card">
+                <div class="header">
+                  <h4 class="title">Registed</h4>
+                  <p class="category">Realtime registed number</p>
+                  <div class="contain">
+                    <div id="slider"></div>
+                    <div class="footer">
+                      <div class="legend">
+                        <i class="fa fa-circle text-success" ></i><span id="registed"> Registed {{message}}</span>
+                      </div>
+                    </div>
+                    <div class="footer">
+                      <div class="legend">
+                        <i class="fa fa-circle text-muted" id="not registed"></i> Not registed
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-8">
+                <div class="header">
+                  <h4 class="title">Database Searching</h4>
+                  <p class="category">Searching the person in database</p>
+                  <div class="content">
+                    <div class="table-full-width">
+                      <table class="table" ng-table="tableParams" show-filter="true">
+                        <tr ng-repeat="user in $data">
+                          <td width="30" style="text-align: left">
+                            <input type="checkbox" ng-click="checkboxClicked(user.id)" ng-model="user.isChecked" />
+                          </td>
+                          <td title="'Name'" filter="{ name: 'text'}" sortable="'name'">
+                            {{user.name}}</td>
+                            <td title="'Department'" filter="{ department: 'text'}" sortable="'department'">
+                              {{user.department}}</td>
+                            </tr>
+                      </table>
+                      {{ user | json }}
+                    </div>
+                  </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+  <script src="bower_components/remarkable-bootstrap-notify/bootstrap-notify.min.js"></script>
+  <script src="bower_components/chart.js/dist/Chart.min.js"></script>
+  <script src="bower_components/roundslider/dist/roundslider.min.js"></script>
+  <script src="src/ng-table.min.js"></script>
+
+  <script type="text/javascript">
+
+    $("#slider").roundSlider({
+      sliderType: "min-range",
+      editableTooltip: false,
+      readOnly: false,	// change to true for readonly mode
+      startAngle: 90,
+      width: 35,
+      radius: 90,
+      min: 0,
+      max: 3000,
+      value: 1024
+    });
+    var data = [
+      {selected:"false", id: 0001, name: "Moroni", department: "AEC"},
+      {selected:"false", id: 0002, name: "Siwakorn", department: "IMS"},
+      {selected:"false", id: 0003,name: "Siwakorn", department: "IMS"},
+      {selected:"false", id: 0004,name: "Siwakorn", department: "IMS"},
+      {selected:"false", id: 0005,name: "Usa", department: "MED"},
+      {selected:"false", id: 0006,name: "Siwakorn", department: "IMS"},
+      {selected:"false", id: 0007,name: "Usa", department: "MED"},
+      {selected:"false", id: 0008,name: "Siwakorn", department: "IMS"},
+      {selected:"false", id: 0009,name: "Usa", department: "MED"},
+      {selected:"false", id: 0010,name: "Siwakorn", department: "IMS"},
+      {selected:"false", id: 0011,name: "Usa", department: "MED"},
+      {selected:"false", id: 0012,name: "Siwakorn", department: "IMS"},
+      {selected:"false", id: 0013,name: "Usa", department: "MED"},
+    ];
+
+    var myApp = angular.module('myApp', ['ngTable']);
+
+    myApp.controller('MainController', function($scope, NgTableParams) {
+        $scope.message = ": 1024";
+
+        $scope.tableParams = new NgTableParams({
+           filter: { name: "" },
+           page: 1,
+           count: 10
+         },
+           { dataset: data}
+         );
+         $scope.checkboxClicked = function(val){
+           console.log(val);
+           //data.selected = 'true'
+           $scope.tableParams.data[val].selected = "true";
+           console.log($scope.tableParams.data[val].selected)
+           $scope.tableParams.reload();
+         }
+
+         // watch for data checkboxes
+         $scope.$watch('checkboxes.items', function(values) {
+        if (!$scope.users) {
+            return;
+        }
+        var checked = 0, unchecked = 0,
+            total = $scope.users.length;
+        angular.forEach($scope.users, function(item) {
+            checked   +=  ($scope.checkboxes.items[item.id]) || 0;
+            unchecked += (!$scope.checkboxes.items[item.id]) || 0;
+        });
+        if ((unchecked == 0) || (checked == 0)) {
+            $scope.checkboxes.checked = (checked == total);
+        }
+        // grayed checkbox
+        angular.element(document.getElementById("select_all")).prop("indeterminate", (checked != 0 && unchecked != 0));
+    }, true);
+       });
+
+  </script>
+
+</html>

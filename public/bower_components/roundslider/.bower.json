@@ -1,0 +1,32 @@
+{
+  "name": "roundslider",
+  "version": "1.0.1",
+  "homepage": "https://github.com/Ceda/tinycircleslider",
+  "authors": [
+    "Soundara Pandian"
+  ],
+  "main": [
+    "./dist/roundslider.min.js",
+    "./dist/roundslider.min.css"
+  ],
+  "license": "MIT",
+  "description": "roundSlider - A free jQuery plugin",
+  "dependencies": {
+    "jquery": ">=1.10.2"
+  },
+  "keywords": [
+    "slider",
+    "circular slider",
+    "range slider"
+  ],
+  "_release": "1.0.1",
+  "_resolution": {
+    "type": "version",
+    "tag": "1.0.1",
+    "commit": "5c9a926264288da6279e0aed3a3490d96a899031"
+  },
+  "_source": "https://github.com/Ceda/roundSlider.git",
+  "_target": "^1.0.1",
+  "_originalSource": "roundSlider",
+  "_direct": true
+}

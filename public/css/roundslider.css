@@ -1,0 +1,14 @@
+.rs-control .rs-range-color {
+    background-color: rgb(119, 196, 19)
+}
+.rs-control .rs-path-color {
+    background-color: rgb(89, 97, 106);
+}
+.rs-tooltip.rs-tooltip-text {
+    top: 65%;
+    font-size: 25px;
+    color: black;
+}
+.rs-handle{
+    display: none;
+}
