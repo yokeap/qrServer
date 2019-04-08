@@ -4,9 +4,9 @@
   }
 }
 
-body {
+/* body {
   background: rgba(203, 203, 210, 0.15);
-}
+} */
 html {
   position: relative;
   min-height: 100%;
@@ -14,6 +14,13 @@ html {
 }
 body {
   margin-bottom: 60px; /* Margin bottom by footer height */
+  font-family: 'Trebuchet MS';
+  color: #fff;
+	background: linear-gradient(-45deg, #EE7752, #E73C7E, #23A6D5, #23D5AB);
+	background-size: 400% 400%;
+	-webkit-animation: Gradient 15s ease infinite;
+	-moz-animation: Gradient 15s ease infinite;
+	animation: Gradient 15s ease infinite;
 }
 .main-container{
   position: absolute;
@@ -45,6 +52,14 @@ body {
   text-align: center;
 }
 
+#logo{
+  position: absolute;
+  left: 0;
+  top: 10%;
+  width: 100%;
+  text-align: center;
+}
+
 #scan-alert {
   position: absolute;
   left: 0;
@@ -54,6 +69,12 @@ body {
 	-webkit-animation: heartbeat 1.5s ease-in-out infinite both;
 	        animation: heartbeat 1.5s ease-in-out infinite both;
 }
+
+#qr-logo{
+  -webkit-animation: heartbeat 1.5s ease-in-out infinite both;
+	        animation: heartbeat 1.5s ease-in-out infinite both;
+}
+
 #welcome {
   position: absolute;
   left: 0;

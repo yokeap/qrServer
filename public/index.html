@@ -14,20 +14,29 @@
     <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
-    <link href="css/main.css" rel="stylesheet">
+    <link href="css/index.css" rel="stylesheet">
     <link href="css/animate.css" rel="stylesheet">
+
+    <!-- Bootstrap core JavaScript -->
+    <script src="bower_components/jquery/dist/jquery.min.js"></script>
+    <script src="bower_components/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="text/javascript" src="src/instascan.min.js"></script>
+
+
+    <script src="bower_components/jquery-code-scanner/jquery-code-scanner.js"></script>
 
   </head>
 
-  <body>
+  <body id='main'>
     <video id="preview"></video>
-    <h1 class="display-2" id="registration" style="font-size:10vw">Registration</h1>
-    <h3 class="display-3" id="scan-alert" style="font-size:7vw">Scan Now!</h3>
+    <h1 class="display-1" id="logo" style="font-size:15vw">REGITECH</h1>
+    <h1 class="display-2" id="registration" style="font-size:10vw">Welcome</h1>
+    <!-- <h3 class="display-3" id="scan-alert" style="font-size:7vw">Scan Now!</h3> -->
     <div class="main-container">
-      <div class="qr-logo">
-        <img src="src/img/logo-big.png" class="img-fluid" alt="Bird">
+      <div >
+        <img id="qr-logo" src="src/img/logo-big.png" class="img-fluid" alt="Bird">
         <div >
-            <h3 class="display-4" id="welcome">Welcome</h3>
+            <!-- <h3 class="display-4" id="welcome">Welcome</h3> -->
             <h1 class="display-4" id="name">Mr.Siwakorn Sukprasertchai</h2>
             <h2 id="department"> Maritime engineering </h2>
             <h2 id="company"> Kasetsart University </h2>
@@ -37,64 +46,33 @@
 
         <footer class="footer">
           <div class="footer-container">
-            <span class="text-muted">Copyright by S.Sukprasertchai.</span>
+            <span class="text-muted">Copyright by REGITECH.</span>
           </div>
         </footer>
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="bower_components/jquery/dist/jquery.min.js"></script>
-    <script src="bower_components/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script type="text/javascript" src="src/instascan.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      var socket = io.connect('http://localhost:9010/qrClient');
+    </script>
 
     <script type="text/javascript">
-    let opts = {
-      // Whether to scan continuously for QR codes. If false, use scanner.scan() to manually scan.
-      // If true, the scanner emits the "scan" event when a QR code is scanned. Default true.
-      continuous: true,
 
-      // The HTML element to use for the camera's video preview. Must be a <video> element.
-      // When the camera is active, this element will have the "active" CSS class, otherwise,
-      // it will have the "inactive" class. By default, an invisible element will be created to
-      // host the video.
-      video: document.getElementById('preview'),
+    // only init when the page has loaded
+    $(document).ready(function() {
 
-      // Whether to horizontally mirror the video preview. This is helpful when trying to
-      // scan a QR code with a user-facing camera. Default true.
-      mirror: true,
+    });
 
-      // Whether to include the scanned image data as part of the scan result. See the "scan" event
-      // for image format details. Default false.
-      captureImage: false,
+    var timeOut;
 
-      // Only applies to continuous mode. Whether to actively scan when the tab is not active.
-      // When false, this reduces CPU usage when the tab is not active. Default true.
-      backgroundScan: true,
-
-      // Only applies to continuous mode. The period, in milliseconds, before the same QR code
-      // will be recognized in succession. Default 5000 (5 seconds).
-      refractoryPeriod: 2000,
-
-      // Only applies to continuous mode. The period, in rendered frames, between scans. A lower scan period
-      // increases CPU usage but makes scan response faster. Default 1 (i.e. analyze every frame).
-      scanPeriod: 1
-    };
-    (function( $ ) {
-
-      let scanner = new Instascan.Scanner(opts);
-      Instascan.Camera.getCameras().then(cameras => {
-        scanner.camera = cameras[cameras.length - 1];
-        scanner.start();
-      }).catch(console.error);
-
-      scanner.addListener('scan', content => {
-         //sca nner.stop();
-         console.log(content);
-         scan_detected(content);
-         setTimeout(function(){
+    $('#main').codeScanner({
+      onScan: function ($element, code) {
+        console.log(code);
+        scan_detected(code);
+        setTimeout(function(){
            scan_timeout();
          }, 2000);
-      });
-    })( jQuery );
+      }
+    });
 
     function scan_timeout(){
       //$("#welcome").html("Scan Now!");
@@ -119,10 +97,28 @@
       $( "#name" ).addClass( "scale-in-center" );
       $( "#department" ).addClass( "scale-in-center" );
       $( "#company" ).addClass( "scale-in-center" );
-      $("#name").html(array[1]);
-      $("#department").html(array[0]);
-      $("#company").html(array[2]);
+
+      //var intID = parseInt(array[0], 10);
+      console.log(content);
+      //emit data to server
+
+      socket.emit('queryOne', parseInt(array[0]));
     }
+
+    socket.on('resultOne', function(userData){
+      if(userData.registed == false ){
+        $("#name").html(userData.name);
+        $("#department").html(userData.dept);
+        $("#company").html(userData.company);
+        socket.emit('registedDB', { "id": parseInt(userData.id), "registed": true});
+      }
+      if(userData.registed == true) {
+        $("#name").html("Already Registed");
+        $("#department").html("");
+        $("#company").html("");
+      }
+    });
+
     </script>
 
   </body>

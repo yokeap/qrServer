@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="S.Sukprasertchai" content="">
+
+    <link href="font/VarelaRound.css" rel="stylesheet">
+    <link href="font/Nutino.css" rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font awesome core css-->
+    <link href="bower_components/font-awesome/css/fontawesome.min.css" rel="stylesheet">
+    <link href="bower_components/font-awesome/css/solid.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="bower_components/flag-icon-css/css/flag-icon.min.css">
+
+    <link href="css/grayscale.css" rel="stylesheet">
+    <link href="css/animate.css" rel="stylesheet">
+
+    <!-- <script src="bower_components/angular/angular.min.js"></script> -->
+
+    <title> Luckydraw system</title>
+
+    <!-- <script src="/cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script> -->
+    <script src="bower_components/d3/d3.min.js"></script>
+    <script src="bower_components/animejs/anime.min.js"></script>
+    <script src="src/chaffle.min.js"></script>
+
+  </head>
+  <body >
+    <header class = "masthead" >
+      <div class="container h-100 align-items-center">
+        <div class="mx-auto text-center h-100">
+          <div class="row justify-content-md-center h-100">
+              <div class="row h-25 justify-content-md-center">
+                <span id="flag" class="flag-icon flag-icon-us flag-icon-background" style = "margin-top:40%; height: 300px; width: 300px;"> </span>
+              </div>
+            <div class="row w-100 justify-content-center align-items-center">
+              <h1 id="name" data-chaffle="en" > </h1>
+              <!-- <div class=" justify-content-md-center">
+                <h1>Siwakorn Sukprasertchai</h1>">
+              </div> -->
+            </div>
+            <div class="row w-100 justify-content-md-center text-center">
+              <h1 id="department" data-chaffle="en"></h1>
+              <!-- <div class="text-center ">
+                <h1>IMS</h1>">
+              </div> -->
+            </div>
+        </div>
+      </div>
+    </header>
+    </div>
+
+  </body>
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <!-- Plugin JavaScript -->
+  <script src="bower_components/jquery-easing/jquery.easing.min.js"></script>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    var socket = io.connect('http://localhost:9010/LuckydrawClient');
+  </script>
+
+
+  <script>
+
+    var country = [
+    "flag-icon-us",
+    "flag-icon-th",
+    "flag-icon-hk",
+    "flag-icon-jp",
+    "flag-icon-ru"
+    ];
+
+    var lastCountry;
+    var staffData;
+
+    var flagEnter = false;
+    var flagState = 0;
+    var interval;
+
+    // var myApp = angular.module('myApp',[]);
+    //
+    // myApp.controller('MainController', function($scope) {
+    //
+    //   $scope.name = "Test";
+    // });
+
+    (function($) {
+      "use strict"; // Start of use strict
+
+
+      $(document).keypress(function(e) {
+        if(e.which == 13) {
+          var flagEvent = false;
+          var luckyStaff = random_item(staffData);
+          var randomCountry = random_item(country);
+          $("#flag")[0].classList.add(randomCountry);
+          flagEnter = true;
+          if(flagState == 0) flagState = 1;
+          if(flagState == 1){
+            // alert('You pressed enter!');
+            flagEnter = false;
+            interval = window.setInterval(function() {
+              flagEvent = !flagEvent;
+              if(flagEvent == true){
+                $("#flag")[0].classList.remove(randomCountry);
+                console.log(randomCountry);
+                randomCountry = random_item(country);
+                lastCountry = randomCountry;
+                $("#flag")[0].classList.add(randomCountry);
+                $("#flag").addClass( "slide-in-top" );
+                $("#flag").removeClass( "slide-out-bottom" );
+              }
+              if(flagEvent == false){
+                lastCountry = randomCountry;
+                $("#flag").removeClass( "slide-in-top" );
+                $("#flag").addClass( "slide-out-bottom" );
+              }
+              lastCountry = randomCountry;
+              flagState = 2;
+              // $("#flag")[0].classList.remove(lastCountry);
+              // $("#flag")[0].classList.add(randomCountry);
+            }, 500);
+          }
+          else if((flagState == 2) && (flagEnter == true)){
+            flagState = false;
+            clearInterval(interval);
+            $("#flag").removeClass( "slide-out-bottom" );
+            $("#flag")[0].classList.add(randomCountry);
+            $("#flag").addClass( "slide-in-top" );
+            window.setTimeout(function() {
+              //$("#flag")[0].classList.remove(lastCountry);
+
+              $("#name").html(luckyStaff.name);
+              $("#department").html(luckyStaff.location);
+              shuffle_text(50, 200);
+              flagState = 3;
+            }, 1000);
+
+          }
+          else if ((flagState > 2) && (flagEnter == true)){
+            flagState = 0;
+            $("#name").html("");
+            $("#department").html("");
+          }
+          else {
+            flagEnter = false;
+          }
+
+          // window.setTimeout(function() {
+          //   var randomCountry = random_item(country);
+          //
+          //   // $("#flag")[0].classList.remove(lastCountry);
+          //   // $("#flag")[0].classList.add(luckyStaff.);
+          // }, 1000);
+
+
+
+        }
+      });
+
+
+
+      //$("#flag")[0].classList.remove('flag-icon-us');
+
+      // var interval = window.setInterval(function() {
+      //   var randomCountry = random_item(country);
+      //
+      //   $("#flag")[0].classList.remove(lastCountry);
+      //   $("#flag")[0].classList.add(randomCountry);
+      //   lastCountry = randomCountry;
+      // }, 100);
+      // var flag = anime({
+      // targets: '#flag',
+      // translateX: [
+      //   // { value: 100, duration: 1200 },
+      //   {value: 500}
+      // ],
+      // backgroundColor: '#FFF',
+      // duration: 2000,
+      // loop: true
+
+
+  })(jQuery);
+
+  socket.on('dbResultQuery', function(msg){
+    staffData = msg;
+  });
+
+  socket.on('collection length', function(msg){
+    // for(var i = 0; i < $scope.userData.length; i++){
+    //   if($scope.userData[i].registed == true){
+    //     ++totalRegistedNumber;
+    //   }
+    console.log(msg);
+  });
+
+  // document.getElementById("name").innerHTML = "test"
+
+  function shuffle_text(speed, delay){
+    const elements = document.querySelectorAll('[data-chaffle]');
+    Array.prototype.forEach.call(elements, function (el) {
+      const chaffle = new Chaffle(el, {
+        lang: 'en', // default: 'en'
+        // 'en' || 'ja' || 'ja-hiragana' || 'ja-katakana' || 'ua'
+        speed: speed, // default: 20
+        delay: delay, // default: 100
+      });
+      chaffle.init();
+    });
+  }
+
+  function random_item(items)
+  {
+    return items[Math.floor(Math.random()*items.length)];
+  }
+  </script>
+</html>

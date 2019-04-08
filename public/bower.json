@@ -15,6 +15,11 @@
     "chartist": "^0.11.0",
     "angular": "^1.7.5",
     "chart.js": "chartjs#^2.7.3",
-    "roundslider": "roundSlider#^1.0.1"
+    "roundslider": "roundSlider#^1.0.1",
+    "datamaps": "^0.5.9",
+    "jquery-easing": "*",
+    "flag-icon-css": "^3.2.1",
+    "animejs": "^2.2.0",
+    "jquery-code-scanner": "^0.0.6"
   }
 }

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="S.Sukprasertchai" content="">
+
+    <link href="font/VarelaRound.css" rel="stylesheet">
+    <link href="font/Nutino.css" rel="stylesheet">
+
+    <!-- Bootstrap core CSS -->
+    <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Font awesome core css-->
+    <link href="bower_components/font-awesome/css/fontawesome.min.css" rel="stylesheet">
+    <link href="bower_components/font-awesome/css/solid.min.css" rel="stylesheet">
+
+    <link href="css/grayscale.css" rel="stylesheet">
+
+    <title> Luckydraw system</title>
+
+    <!-- <script src="/cdnjs.cloudflare.com/ajax/libs/d3/3.5.3/d3.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/topojson/1.6.9/topojson.min.js"></script> -->
+    <script src="bower_components/d3/d3.min.js"></script>
+    <script src="bower_components/topojson/topojson.min.js"></script>
+    <script src="bower_components/datamaps/dist/datamaps.world.min.js"></script>
+
+  </head>
+  <body id="page-top">
+    <header class = "masthead">
+      <div id="map-container" style="position: absoulte; margin-left: 5%; width: 90%; height: 90%;"></div>
+    </header>
+
+    <!-- <section id="about" class="about-section text-center">
+      <div class="container">
+        <div class="row">
+          <div class="col-lg-8 mx-auto">
+            <div id="map-container2" style="position: relative; width: 90%; height: 90%;"></div>
+          </div>
+        </div>
+        <img src="img/ipad.png" class="img-fluid" alt="">
+      </div>
+    </section> -->
+
+  </body>
+  <script src="bower_components/jquery/dist/jquery.min.js"></script>
+  <!-- Plugin JavaScript -->
+  <script src="bower_components/jquery-easing/jquery.easing.min.js"></script>
+
+
+  <script>
+    (function($) {
+      "use strict"; // Start of use strict
+      var colors = d3.scale.category10();
+      var country = ["USA", "RUS", "BRA", "CAN", "ZAF", "IND"];
+      var basic_choropleth = new Datamap({
+        element: document.getElementById("map-container"),
+        projection: 'mercator',
+        fills: {
+          defaultFill: "#29293d",
+          authorHasTraveledTo: "#fa0fa0"
+        },
+        data: {
+        }
+      });
+      //
+      // var choropleth = new Datamap({
+      //   element: document.getElementById("map-container2"),
+      //   projection: 'mercator',
+      //   fills: {
+      //     defaultFill: "#29293d",
+      //     authorHasTraveledTo: "#fa0fa0"
+      //   },
+      //   data: {
+      //   }
+      // });
+
+      // setTimeout(function () {
+      //   alert("Timeout");
+      //   scrollDown();
+      // }, 1000);
+
+      var interval = window.setInterval(function() {
+        var randomCountry = "USA";
+        var countryColor = {};
+        var defaultColor = "#29293d";
+        basic_choropleth.updateChoropleth({
+          USA: defaultColor,
+          RUS: defaultColor,
+          AUS: defaultColor,
+          BRA: defaultColor,
+          CAN: defaultColor,
+          ZAF: defaultColor,
+          IND: defaultColor,
+        });
+        countryColor[random_item(country)] = "#00ff00";
+        console.log(randomCountry);
+        basic_choropleth.updateChoropleth(countryColor);
+
+      }, 200);
+
+      function random_item(items)
+      {
+        return items[Math.floor(Math.random()*items.length)];
+      }
+
+      // scrollDown();
+      // function scrollDown(){
+      //   $('html, body').animate({
+      //       scrollTop: (200)
+      //    }, 1000, "easeInOutExpo");
+      // }
+
+  })(jQuery);
+  </script>
+</html>

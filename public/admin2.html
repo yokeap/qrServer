@@ -144,13 +144,22 @@
          });
 
          $scope.$watch('users', function(newValues) {
+           // updateTable();
+           //$scope.tableParams.userTable.reload();
+           // angular.forEach($scope.users, function(item) {
+           //  if (angular.isDefined(item.id)) {
+           //      $scope.checkboxes.items[item.id] = true;
+           //  }
+           // $scope.selectedItems.length = 0;
            sliderVal = 0;
            angular.forEach(newValues, function(user) {
               if (user.registed == true) {
+                  // $scope.selectedItems.push(item.name);
                  sliderVal++;
               }
            });
            $('#arcRegistedNumber').roundSlider('option', 'value', sliderVal);
+        // console.log($scope.selectedItems);
         }, true);
 
          $scope.checkboxClicked = function(val){
@@ -159,11 +168,15 @@
          }
 
          socket.on('resultOne', function(_user) {
+            //data.registed = 'true'
+            console.log(_user);
+            // console.log("test :" + $scope.users[checkBoxVal].registed + "test 2 :" + _users.registed)
             //emit data to server
             socket.emit('editDB', {
               id: _user.id,
               registed: !_user.registed
             });
+            //$scope.tableParams.reload();
         });
 
          socket.on('collection length', function(msg){
